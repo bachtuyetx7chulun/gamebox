@@ -16,6 +16,7 @@
       "@app/*": ["src/app/*"],
       "@config/*": ["src/config/*"],
       "@users/*": ["src/users/*"],
+      "@auth/*":["src/auth/*"]
     }
   }
 }
