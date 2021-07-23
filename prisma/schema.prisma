@@ -1,0 +1,34 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  email        String?  @unique // Sử dụng với local account
+  id           Int      @id @default(autoincrement())
+  name         String? // Tên người dùng
+  picture      String? // Ảnh người dùng, mặc
+  type         Type     @relation(fields: [typeId], references: [name])
+  bio          String? // Biography: Mô tả bản thân
+  refreshToken String? // Tạm thời cho vào, tính sau
+  password     String? // Sử dụng cho local account
+  facebookId   String? // Sử dụng cho facebook auth
+  googleId     String? // Sử dụng cho google auth
+  active       Boolean  @default(true) // Tài khoản được kích hoạt
+  premium      Boolean  @default(false) // Khách nạp tiền ~ Tạm thời
+  createAt     DateTime @default(now())
+  updateAt     DateTime @default(now())
+  typeId       String // Xây dựng quan hệ với Type
+}
+
+model Type {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String? // Describe your type you want
+  acronym     String  @unique // Cronym: Tên viết tắt
+  User        User[]
+}
