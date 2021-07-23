@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common'
 import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class UsersService {
+  constructor(private prisma: PrismaClient) {}
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user'
+    return 'This action return new user'
   }
 
-  findAll() {
-    return []
+  async findAll() {
+    const users = await this.prisma.user.findMany({})
+    return users
   }
   findOne(id: number) {
     return `This action returns a #${id} user`
