@@ -4,11 +4,13 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { UsersModule } from '@users/users.module'
+import { TypesModule } from '@type/types.module'
 
 @Module({
   imports: [
     UsersModule,
     AuthModule,
+    TypesModule,
     ConfigModule.forRoot({
       load: [configuration],
       cache: true,
