@@ -26,9 +26,12 @@ model User {
 }
 
 model Type {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String? // Describe your type you want
-  acronym     String  @unique // Cronym: Tên viết tắt
+  acronym     String   @unique // Cronym: Tên viết tắt
+  active      Boolean  @default(true)
   User        User[]
+  createAt    DateTime @default(now())
+  updateAt    DateTime @default(now())
 }

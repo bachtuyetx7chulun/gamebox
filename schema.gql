@@ -2,17 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type Type {
   id: Int!
   name: String!
-  email: String!
-  picture: String
-  googleId: String
-  facebookId: String
+  description: String!
+  acronym: String!
   active: Boolean!
-  premium: Boolean!
-  password: String
-  refreshToken: String
+  users: [User!]
   createAt: DateTime!
   updateAt: DateTime!
 }
@@ -22,15 +18,37 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  id: Int!
+  name: String!
+  email: String!
+  picture: String
+  googleId: String
+  facebookId: String
+  type: Type!
+  active: Boolean!
+  premium: Boolean!
+  password: String
+  refreshToken: String
+  createAt: DateTime!
+  updateAt: DateTime!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
+  types: [Type!]!
+  type(idTypeInput: Float!): Type!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createType(createTypeInput: CreateTypeInput!): Type!
+  updateType(updateTypeInput: UpdateTypeInput!): Type!
+  deleteType(idTypeInput: Float!): Boolean!
+  activeType(idTypeInput: Float!): Type!
 }
 
 input CreateUserInput {
@@ -39,4 +57,19 @@ input CreateUserInput {
 
 input UpdateUserInput {
   id: Int!
+}
+
+input CreateTypeInput {
+  name: String!
+  acronym: String!
+  description: String
+}
+
+input UpdateTypeInput {
+  id: Float!
+  name: String!
+  acronym: String!
+  description: String
+  active: Boolean
+  updateAt: DateTime = "2021-07-25T16:46:32.403Z"
 }

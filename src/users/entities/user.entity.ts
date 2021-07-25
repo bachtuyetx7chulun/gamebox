@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ObjectType, Field, Int } from '@nestjs/graphql'
+import { Type } from 'src/types/entities/type.entity'
 
 @ObjectType()
 export class User {
@@ -19,6 +21,9 @@ export class User {
 
   @Field({ nullable: true })
   facebookId: string
+
+  @Field((type) => Type)
+  type: Type
 
   @Field({ name: 'active', defaultValue: true })
   active: boolean
