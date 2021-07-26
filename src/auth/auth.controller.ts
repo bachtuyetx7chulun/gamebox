@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Controller, Get, Req, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from '@auth/auth.service'
 
@@ -16,5 +16,16 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
     return this.authService.googleLogin(req)
+  }
+
+  @Post('signin')
+  @UseGuards(AuthGuard('local'))
+  localSignIn(@Req() req) {
+    return this.authService.localSignIn(req.user)
+  }
+
+  @Post('signup')
+  localSignUp(@Req() req) {
+    return this.authService.localSignUp(req.body)
   }
 }

@@ -10,7 +10,6 @@ CREATE TABLE "User" (
     "facebookId" TEXT,
     "googleId" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT true,
-    "premium" BOOLEAN NOT NULL DEFAULT false,
     "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "typeId" TEXT NOT NULL,
@@ -22,7 +21,10 @@ CREATE TABLE "Type" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "acronym" TEXT NOT NULL
+    "acronym" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateIndex

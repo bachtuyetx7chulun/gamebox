@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
 
 @Injectable()
@@ -6,14 +6,22 @@ export class TypesService {
   constructor(private prisma: PrismaClient) {}
 
   async create(createTypeInput): Promise<any> {
-    const createType = await this.prisma.type.create({
-      data: createTypeInput,
-    })
-    return createType
+    try {
+      const createType = await this.prisma.type.create({
+        data: createTypeInput,
+      })
+      return createType
+    } catch (error) {
+      return new HttpException('This type is existed', HttpStatus.FOUND)
+    }
   }
 
   async findAll(): Promise<any> {
-    const types = await this.prisma.type.findMany({})
+    const types = await this.prisma.type.findMany({
+      include: {
+        users: true,
+      },
+    })
     return types
   }
 

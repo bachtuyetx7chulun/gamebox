@@ -19,7 +19,6 @@ model User {
   facebookId   String? // Sử dụng cho facebook auth
   googleId     String? // Sử dụng cho google auth
   active       Boolean  @default(true) // Tài khoản được kích hoạt
-  premium      Boolean  @default(false) // Khách nạp tiền ~ Tạm thời
   createAt     DateTime @default(now())
   updateAt     DateTime @default(now())
   typeId       String // Xây dựng quan hệ với Type
@@ -31,7 +30,7 @@ model Type {
   description String? // Describe your type you want
   acronym     String   @unique // Cronym: Tên viết tắt
   active      Boolean  @default(true)
-  User        User[]
+  users       User[]
   createAt    DateTime @default(now())
   updateAt    DateTime @default(now())
 }

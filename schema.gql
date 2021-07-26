@@ -21,13 +21,12 @@ scalar DateTime
 type User {
   id: Int!
   name: String!
-  email: String!
+  email: String
   picture: String
   googleId: String
   facebookId: String
   type: Type!
   active: Boolean!
-  premium: Boolean!
   password: String
   refreshToken: String
   createAt: DateTime!
@@ -71,5 +70,5 @@ input UpdateTypeInput {
   acronym: String!
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-07-25T16:46:32.403Z"
+  updateAt: DateTime = "2021-07-26T10:25:31.885Z"
 }

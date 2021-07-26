@@ -10,7 +10,7 @@ export class User {
   @Field()
   name: string
 
-  @Field()
+  @Field({ nullable: true })
   email: string
 
   @Field({ name: 'picture', defaultValue: 'https://image.flaticon.com/icons/png/512/843/843280.png', nullable: true })
@@ -27,9 +27,6 @@ export class User {
 
   @Field({ name: 'active', defaultValue: true })
   active: boolean
-
-  @Field({ name: 'premium', defaultValue: false })
-  premium: boolean
 
   @Field({ nullable: true })
   password: string
