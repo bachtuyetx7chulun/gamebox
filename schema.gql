@@ -44,6 +44,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  removeAllUser: Boolean!
   createType(createTypeInput: CreateTypeInput!): Type!
   updateType(updateTypeInput: UpdateTypeInput!): Type!
   deleteType(idTypeInput: Float!): Boolean!
@@ -70,5 +71,5 @@ input UpdateTypeInput {
   acronym: String!
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-07-26T10:25:31.885Z"
+  updateAt: DateTime = "2021-07-27T09:09:49.322Z"
 }

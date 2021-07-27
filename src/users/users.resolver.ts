@@ -32,4 +32,9 @@ export class UsersResolver {
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.remove(id)
   }
+
+  @Mutation(() => Boolean)
+  removeAllUser() {
+    return this.usersService.deleteAllUser()
+  }
 }

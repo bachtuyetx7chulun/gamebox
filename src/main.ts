@@ -12,6 +12,7 @@ async function bootstrap() {
     }),
   )
   const port = app.get(ConfigService).get('HOST_PORT')
+
   await app.listen(port, () => {
     console.log(`${chalk.green('Server is running on port')} ${chalk.yellow(port)} `)
   })

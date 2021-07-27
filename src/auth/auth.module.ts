@@ -13,7 +13,7 @@ import { PrismaClient } from '@prisma/client'
     PassportModule,
     JwtModule.register({
       secret: jwt.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '7d' },
     }),
   ],
   controllers: [AuthController],

@@ -20,6 +20,7 @@ export class UsersService {
     })
     return users
   }
+
   findOne(id: number) {
     return `This action returns a #${id} user`
   }
@@ -31,5 +32,10 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`
+  }
+
+  async deleteAllUser() {
+    await this.prisma.user.deleteMany({})
+    return true
   }
 }

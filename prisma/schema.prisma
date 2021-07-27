@@ -18,7 +18,8 @@ model User {
   password     String? // Sử dụng cho local account
   facebookId   String? // Sử dụng cho facebook auth
   googleId     String? // Sử dụng cho google auth
-  active       Boolean  @default(true) // Tài khoản được kích hoạt
+  active       Boolean  @default(false) // Tài khoản được kích hoạt
+  activeLink   String?
   createAt     DateTime @default(now())
   updateAt     DateTime @default(now())
   typeId       String // Xây dựng quan hệ với Type

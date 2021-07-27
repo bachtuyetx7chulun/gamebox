@@ -15,17 +15,22 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req)
+    return this.authService.googleSignIn(req)
   }
 
   @Post('signin')
-  @UseGuards(AuthGuard('local'))
+  // @UseGuards(AuthGuard('local'))
   localSignIn(@Req() req) {
-    return this.authService.localSignIn(req.user)
+    return this.authService.localSignIn(req.body)
   }
 
   @Post('signup')
   localSignUp(@Req() req) {
     return this.authService.localSignUp(req.body)
+  }
+
+  @Get('refresh')
+  refreshToken(@Req() req) {
+    return this.authService.refreshToken(req)
   }
 }

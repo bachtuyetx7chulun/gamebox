@@ -17,7 +17,8 @@
       "@config/*": ["src/config/*"],
       "@users/*": ["src/users/*"],
       "@auth/*":["src/auth/*"],
-      "@type/*": ["src/types/*"]
+      "@type/*": ["src/types/*"],
+      "@utils/*":["src/utils/*"]
     }
   }
 }
