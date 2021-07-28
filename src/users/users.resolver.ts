@@ -1,17 +1,13 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { UsersService } from '@users/users.service'
+import { AuthGuard } from '@auth/guards/auth.guard'
+import { UseGuards } from '@nestjs/common'
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { User } from '@users/entities/user.entity'
-import { CreateUserInput } from '@users/dto/create-user.input'
-import { UpdateUserInput } from '@users/dto/update-user.input'
+import { UsersService } from '@users/users.service'
+import { UserDTO } from './dto/user.dto'
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
-
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput)
-  }
 
   @Query(() => [User], { name: 'users' })
   findAll() {
@@ -23,18 +19,14 @@ export class UsersResolver {
     return this.usersService.findOne(id)
   }
 
-  @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput)
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id)
-  }
-
   @Mutation(() => Boolean)
   removeAllUser() {
     return this.usersService.deleteAllUser()
+  }
+
+  @Query(() => UserDTO, { name: 'profile' })
+  @UseGuards(AuthGuard)
+  getProfile(@Args('access_token') access_token: string) {
+    return this.usersService.getProfile(access_token)
   }
 }

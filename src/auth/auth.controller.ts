@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { AuthService } from '@auth/auth.service'
 import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { AuthService } from '@auth/auth.service'
 
 @Controller('auth')
 export class AuthController {

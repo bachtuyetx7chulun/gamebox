@@ -1,12 +1,9 @@
+// TODO: Simple to use, get type user and return them
 export const getPayload = (payload: any, type: string) => {
   if (type === 'local') {
-    const { email, name, picture, bio, active } = payload
+    const { email } = payload
     return {
       email,
-      name,
-      picture,
-      bio,
-      active,
       googleId: null,
       facebookId: null,
       type,
@@ -14,13 +11,9 @@ export const getPayload = (payload: any, type: string) => {
   }
 
   if (type === 'google') {
-    const { name, picture, bio, active, googleId } = payload
+    const { googleId } = payload
     return {
       email: null,
-      name,
-      picture,
-      bio,
-      active,
       googleId,
       facebookId: null,
       type,
@@ -32,6 +25,7 @@ export const getPayload = (payload: any, type: string) => {
   }
 }
 
+// TODO: Check refresh token from header and database ? compare and then return true or false
 export const compareRefreshToken = async (prisma: any, payload, refreshToken: string) => {
   const { email, googleId, facebookId } = payload
   if (email) {
@@ -67,6 +61,7 @@ export const compareRefreshToken = async (prisma: any, payload, refreshToken: st
   return true
 }
 
+// TODO: Convert data and then parser to jwt format
 export const jwtParser = async (jwtService: any, payload, secret: string, options?: any) => {
   const token = await jwtService.signAsync(
     {
@@ -79,4 +74,8 @@ export const jwtParser = async (jwtService: any, payload, secret: string, option
     },
   )
   return token
+}
+
+export const getTokenFromBearer = (bearerToken: string) => {
+  return bearerToken.split(' ')[1]
 }
