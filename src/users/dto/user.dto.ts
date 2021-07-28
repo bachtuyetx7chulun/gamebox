@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { Type } from '@type/entities/type.entity'
 
 @ObjectType()
-export class User {
+export class UserDTO {
   @Field(() => Int)
   id: number
 
@@ -27,12 +27,6 @@ export class User {
 
   @Field({ name: 'active', defaultValue: true })
   active: boolean
-
-  @Field({ nullable: true })
-  password: string
-
-  @Field({ nullable: true })
-  refreshToken: string
 
   @Field({ name: 'createAt', defaultValue: new Date() })
   createAt: Date

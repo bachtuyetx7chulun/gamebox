@@ -73,47 +73,49 @@ export class AuthService {
   }
 
   async localSignIn(body) {
-    const { email, password } = body
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email,
-      },
-    })
-
-    if (await comparePassword(password, user.password)) {
-      const refreshToken = await this.jwtService.signAsync(
-        {
-          ...getPayload(user, 'local'),
-        },
-        {
-          expiresIn: '30d',
-          secret: jwt.refresh_secret,
-        },
-      )
-
-      await this.prisma.user.update({
+    try {
+      const { email, password } = body
+      const user = await this.prisma.user.findFirst({
         where: {
           email,
         },
-        data: {
-          refreshToken: refreshToken,
-        },
       })
 
-      const payload = getPayload(user, 'local')
-      return {
-        access_token: this.jwtService.sign(payload),
-        refresh_token: refreshToken,
-      }
-    }
+      if (await comparePassword(password, user.password)) {
+        const refreshToken = await this.jwtService.signAsync(
+          {
+            ...getPayload(user, 'local'),
+          },
+          {
+            expiresIn: '30d',
+            secret: jwt.refresh_secret,
+          },
+        )
 
-    return new UnauthorizedException()
+        await this.prisma.user.update({
+          where: {
+            email,
+          },
+          data: {
+            refreshToken: refreshToken,
+          },
+        })
+
+        const payload = getPayload(user, 'local')
+        return {
+          access_token: this.jwtService.sign(payload),
+          refresh_token: refreshToken,
+        }
+      }
+    } catch (error) {
+      return new UnauthorizedException()
+    }
   }
 
   async localSignUp(body) {
     try {
       const { email, name, password } = body
-      const newUser = await this.prisma.user.create({
+      await this.prisma.user.create({
         data: {
           email,
           name,
@@ -123,7 +125,7 @@ export class AuthService {
         },
       })
 
-      return newUser
+      return true
     } catch (error) {
       return new HttpException('User is existed', HttpStatus.FOUND)
     }
