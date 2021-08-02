@@ -11,18 +11,63 @@ export class UsersService {
     const users = await this.prisma.user.findMany({
       include: {
         type: true,
+        role: true,
+        gameUsers: true,
       },
     })
+
     return users
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`
+  async findOne(name: string) {
+    try {
+      const user = await this.prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              email: name,
+            },
+            {
+              googleId: name,
+            },
+            {
+              facebookId: name,
+            },
+          ],
+        },
+        include: {
+          gameUsers: true,
+          role: true,
+          type: true,
+        },
+      })
+
+      return user
+    } catch (error) {
+      return null
+    }
   }
 
-  async deleteAllUser() {
-    await this.prisma.user.deleteMany({})
-    return true
+  async removeUsers() {
+    try {
+      await this.prisma.user.deleteMany({})
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  async removeUserById(id) {
+    try {
+      await this.prisma.user.delete({
+        where: {
+          id,
+        },
+      })
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
   async getProfile(access_token) {
@@ -36,6 +81,8 @@ export class UsersService {
         where: { email },
         include: {
           type: true,
+          role: true,
+          gameUsers: true,
         },
       })
 
@@ -47,6 +94,7 @@ export class UsersService {
         where: { googleId },
         include: {
           type: true,
+          role: true,
         },
       })
 
@@ -58,6 +106,7 @@ export class UsersService {
         where: { facebookId },
         include: {
           type: true,
+          role: true,
         },
       })
 

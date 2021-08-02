@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(
     new ValidationPipe({
-      disableErrorMessages: true,
+      // disableErrorMessages: true,
     }),
   )
   const port = app.get(ConfigService).get('HOST_PORT')

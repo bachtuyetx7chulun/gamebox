@@ -8,21 +8,24 @@ generator client {
 }
 
 model User {
-  email        String?  @unique // Sử dụng với local account
-  id           Int      @id @default(autoincrement())
+  email        String?    @unique // Sử dụng với local account
+  id           Int        @id @default(autoincrement())
   name         String? // Tên người dùng
   picture      String? // Ảnh người dùng, mặc
-  type         Type     @relation(fields: [typeId], references: [name])
+  type         Type       @relation(fields: [typeId], references: [name])
+  role         Role       @relation(fields: [roleId], references: [name])
   bio          String? // Biography: Mô tả bản thân
   refreshToken String? // Tạm thời cho vào, tính sau
   password     String? // Sử dụng cho local account
   facebookId   String? // Sử dụng cho facebook auth
   googleId     String? // Sử dụng cho google auth
-  active       Boolean  @default(false) // Tài khoản được kích hoạt
+  active       Boolean    @default(false) // Tài khoản được kích hoạt
   activeLink   String?
-  createAt     DateTime @default(now())
-  updateAt     DateTime @default(now())
+  createAt     DateTime   @default(now())
+  updateAt     DateTime   @default(now())
   typeId       String // Xây dựng quan hệ với Type
+  roleId       String
+  gameUsers     GameUser[]
 }
 
 model Type {
@@ -34,4 +37,44 @@ model Type {
   users       User[]
   createAt    DateTime @default(now())
   updateAt    DateTime @default(now())
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  active      Boolean  @default(true)
+  users       User[]
+  createAt    DateTime @default(now())
+  updateAt    DateTime @default(now())
+}
+
+model Game {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  engine      String?
+  createAt    DateTime   @default(now())
+  updateAt    DateTime   @default(now())
+  GameUser    GameUser[]
+}
+
+model GameUser {
+  id         Int       @id @default(autoincrement())
+  name       String? // If user has an account, the system will autofill name from user
+  user       User?     @relation(fields: [userId], references: [id])
+  gameRoom   GameRoom? @relation(fields: [gameRoomId], references: [id])
+  userId     Int?
+  gameRoomId Int?
+  game       Game?     @relation(fields: [gameId], references: [id])
+  gameId     Int?
+}
+
+model GameRoom {
+  id          Int        @id @default(autoincrement())
+  name        String? // Random name room or regist a name  room
+  playerCount Int?
+  gameUsers   GameUser[]
+  createAt    DateTime   @default(now())
+  updateAt    DateTime   @default(now())
 }

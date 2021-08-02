@@ -41,7 +41,7 @@ export class AuthService {
       })
 
       if (userField === null) {
-        const data = { googleId: email, picture, name: fullName, typeId: 'google' }
+        const data = { googleId: email, picture, name: fullName, typeId: 'google', roleId: 'user' }
         const newGoogleUser = await this.prisma.user.create({
           data,
         })
@@ -78,6 +78,10 @@ export class AuthService {
       const user = await this.prisma.user.findFirst({
         where: {
           email,
+        },
+        include: {
+          role: true,
+          type: true,
         },
       })
 
@@ -121,7 +125,8 @@ export class AuthService {
           name,
           password: await hashPassword(password),
           picture: 'https://image.flaticon.com/icons/png/512/843/843280.png',
-          typeId: 'local', // Id for local
+          typeId: 'local', // Id for local,
+          roleId: 'user',
         },
       })
 
