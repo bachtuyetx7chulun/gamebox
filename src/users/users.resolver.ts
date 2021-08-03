@@ -1,9 +1,8 @@
 import { AuthGuard } from '@auth/guards/auth.guard'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { User } from '@users/entities/user.entity'
 import { UsersService } from '@users/users.service'
-import { UserDTO } from './dto/user.dto'
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -29,9 +28,11 @@ export class UsersResolver {
     return this.usersService.removeUserById(id)
   }
 
-  @Query(() => UserDTO, { name: 'profile' })
+  @Query(() => User, { name: 'profile', nullable: true })
   @UseGuards(AuthGuard)
-  getProfile(@Args('access_token') access_token: string) {
+  getProfile(@Context() ctx) {
+    const headers = ctx['req']['headers']
+    const { access_token } = headers
     return this.usersService.getProfile(access_token)
   }
 }

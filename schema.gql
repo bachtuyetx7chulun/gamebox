@@ -72,23 +72,10 @@ type Role {
   updateAt: DateTime!
 }
 
-type UserDTO {
-  id: Int!
-  name: String!
-  email: String
-  picture: String
-  googleId: String
-  facebookId: String
-  type: Type!
-  active: Boolean!
-  createAt: DateTime!
-  updateAt: DateTime!
-}
-
 type Query {
   users: [User!]!
   user(name: String!): User
-  profile(access_token: String!): UserDTO!
+  profile: User
   roles: [Role!]!
   role(id: Int!): Role!
   games: [Game!]!
@@ -168,5 +155,5 @@ input UpdateTypeInput {
   acronym: String!
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-08-02T11:12:03.298Z"
+  updateAt: DateTime = "2021-08-03T03:53:02.140Z"
 }

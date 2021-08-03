@@ -71,48 +71,53 @@ export class UsersService {
   }
 
   async getProfile(access_token) {
-    const token = getTokenFromBearer(access_token)
-    const payload = this.jwtService.verify(token)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { email, googleId, facebookId, type } = payload
+    try {
+      const token = getTokenFromBearer(access_token)
+      const payload = this.jwtService.verify(token)
+      console.log(payload)
 
-    if (type === 'local') {
-      const user = await this.prisma.user.findFirst({
-        where: { email },
-        include: {
-          type: true,
-          role: true,
-          gameUsers: true,
-        },
-      })
+      const { email, googleId, facebookId, type } = payload
 
-      return user
+      if (type === 'local') {
+        const user = await this.prisma.user.findFirst({
+          where: { email },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+
+      if (type === 'google') {
+        const user = await this.prisma.user.findFirst({
+          where: { googleId },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+
+      if (type === 'facebook') {
+        const user = await this.prisma.user.findFirst({
+          where: { facebookId },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+    } catch (error) {
+      return new UnauthorizedException()
     }
-
-    if (type === 'google') {
-      const user = await this.prisma.user.findFirst({
-        where: { googleId },
-        include: {
-          type: true,
-          role: true,
-        },
-      })
-
-      return user
-    }
-
-    if (type === 'facebook') {
-      const user = await this.prisma.user.findFirst({
-        where: { facebookId },
-        include: {
-          type: true,
-          role: true,
-        },
-      })
-
-      return user
-    }
-
-    return new UnauthorizedException()
   }
 }
