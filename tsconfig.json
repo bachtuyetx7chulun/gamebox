@@ -19,7 +19,11 @@
       "@auth/*":["src/auth/*"],
       "@type/*": ["src/types/*"],
       "@utils/*":["src/utils/*"],
-      "@middlewares/*":["src/middlewares/*"]
+      "@middlewares/*":["src/middlewares/*"],
+      "@roles/*":["src/roles/*"],
+      "@games/*": ["src/games/*"],
+      "@gameusers/*":["src/gameusers/*"],
+      "@gamerooms/*":["src/gamerooms/*"]
     }
   }
 }

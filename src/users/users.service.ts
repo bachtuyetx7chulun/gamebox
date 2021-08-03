@@ -11,59 +11,113 @@ export class UsersService {
     const users = await this.prisma.user.findMany({
       include: {
         type: true,
+        role: true,
+        gameUsers: true,
       },
     })
+
     return users
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`
+  async findOne(name: string) {
+    try {
+      const user = await this.prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              email: name,
+            },
+            {
+              googleId: name,
+            },
+            {
+              facebookId: name,
+            },
+          ],
+        },
+        include: {
+          gameUsers: true,
+          role: true,
+          type: true,
+        },
+      })
+
+      return user
+    } catch (error) {
+      return null
+    }
   }
 
-  async deleteAllUser() {
-    await this.prisma.user.deleteMany({})
-    return true
+  async removeUsers() {
+    try {
+      await this.prisma.user.deleteMany({})
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  async removeUserById(id) {
+    try {
+      await this.prisma.user.delete({
+        where: {
+          id,
+        },
+      })
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
   async getProfile(access_token) {
-    const token = getTokenFromBearer(access_token)
-    const payload = this.jwtService.verify(token)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { email, googleId, facebookId, type } = payload
+    try {
+      const token = getTokenFromBearer(access_token)
+      const payload = this.jwtService.verify(token)
+      console.log(payload)
 
-    if (type === 'local') {
-      const user = await this.prisma.user.findFirst({
-        where: { email },
-        include: {
-          type: true,
-        },
-      })
+      const { email, googleId, facebookId, type } = payload
 
-      return user
+      if (type === 'local') {
+        const user = await this.prisma.user.findFirst({
+          where: { email },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+
+      if (type === 'google') {
+        const user = await this.prisma.user.findFirst({
+          where: { googleId },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+
+      if (type === 'facebook') {
+        const user = await this.prisma.user.findFirst({
+          where: { facebookId },
+          include: {
+            type: true,
+            role: true,
+            gameUsers: true,
+          },
+        })
+
+        return user
+      }
+    } catch (error) {
+      return new UnauthorizedException()
     }
-
-    if (type === 'google') {
-      const user = await this.prisma.user.findFirst({
-        where: { googleId },
-        include: {
-          type: true,
-        },
-      })
-
-      return user
-    }
-
-    if (type === 'facebook') {
-      const user = await this.prisma.user.findFirst({
-        where: { facebookId },
-        include: {
-          type: true,
-        },
-      })
-
-      return user
-    }
-
-    return new UnauthorizedException()
   }
 }

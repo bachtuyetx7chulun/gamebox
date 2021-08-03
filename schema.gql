@@ -2,26 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: Int!
-  name: String!
-  email: String
-  picture: String
-  googleId: String
-  facebookId: String
-  type: Type!
-  active: Boolean!
-  password: String
-  refreshToken: String
-  createAt: DateTime!
-  updateAt: DateTime!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Type {
   id: Int!
   name: String!
@@ -33,7 +13,39 @@ type Type {
   updateAt: DateTime!
 }
 
-type UserDTO {
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Gameroom {
+  gameUsers: [Gameuser!]
+  id: Float!
+  name: String!
+  playerCount: Float!
+  createAt: DateTime!
+  updateAt: DateTime!
+}
+
+type Game {
+  gameusers: [Gameuser!]
+  id: Float!
+  name: String!
+  description: String!
+  engine: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+}
+
+type Gameuser {
+  gameRoom: Gameroom
+  user: User
+  game: Game
+  id: Float!
+  name: String!
+}
+
+type User {
   id: Int!
   name: String!
   email: String
@@ -41,25 +53,94 @@ type UserDTO {
   googleId: String
   facebookId: String
   type: Type!
+  role: Role!
+  gameUsers: [Gameuser!]
   active: Boolean!
+  password: String
+  refreshToken: String
+  createAt: DateTime!
+  updateAt: DateTime!
+}
+
+type Role {
+  users: [User!]
+  id: Float!
+  name: String!
+  active: Boolean!
+  description: String!
   createAt: DateTime!
   updateAt: DateTime!
 }
 
 type Query {
   users: [User!]!
-  user(id: Int!): User!
-  profile(access_token: String!): UserDTO!
+  user(name: String!): User
+  profile: User
+  roles: [Role!]!
+  role(id: Int!): Role!
+  games: [Game!]!
+  game(id: Int!): [Game!]!
+  gameusers: [Gameuser!]!
+  gameuser(id: Int!): Gameuser
+  gamerooms: [Gameroom!]!
+  gameroom(id: Int!): Gameroom!
   types: [Type!]!
   type(idTypeInput: Float!): Type!
 }
 
 type Mutation {
-  removeAllUser: Boolean!
+  removeUsers: Boolean!
+  removeUserById(id: Float!): Boolean!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateGameroom(updateGameroomInput: UpdateGameroomInput!): Gameroom!
+  removeRoleById(id: Float!): Boolean!
+  removeRoles: Boolean!
+  createGame(createGameInput: CreateGameInput!): Game!
+  removeGameById(id: Float!): Boolean!
+  removeGames: Boolean!
+  createGameuser(createGameuserInput: CreateGameuserInput!): Gameuser
+  updateGameuser(updateGameuserInput: UpdateGameuserInput!): Gameuser
+  removeGameuserById(id: Int!): Boolean
+  removeGameusers: Boolean
+  createGameroom(roomName: String!): Gameroom!
+  removeGameroomById(id: Int!): Boolean!
+  removeGamerooms: Boolean!
   createType(createTypeInput: CreateTypeInput!): Type!
   updateType(updateTypeInput: UpdateTypeInput!): Type!
   deleteType(idTypeInput: Float!): Boolean!
   activeType(idTypeInput: Float!): Type!
+}
+
+input CreateRoleInput {
+  name: String!
+  description: String
+}
+
+input UpdateGameroomInput {
+  name: String
+  playerCount: Float
+  id: Float!
+}
+
+input CreateGameInput {
+  name: String!
+  description: String
+  engine: String!
+}
+
+input CreateGameuserInput {
+  name: String!
+  gameId: Float!
+  userId: Float
+  gameRoomId: Float
+}
+
+input UpdateGameuserInput {
+  name: String
+  gameId: Float
+  userId: Float
+  gameRoomId: Float
+  id: Int!
 }
 
 input CreateTypeInput {
@@ -74,5 +155,5 @@ input UpdateTypeInput {
   acronym: String!
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-07-28T08:00:53.239Z"
+  updateAt: DateTime = "2021-08-03T03:53:02.140Z"
 }
