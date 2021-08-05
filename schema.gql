@@ -89,9 +89,10 @@ type Query {
 }
 
 type Mutation {
+  updateUser(updateUserInput: UpdateUserInput!): User
   removeUsers: Boolean!
   removeUserById(id: Float!): Boolean!
-  createRole(createRoleInput: CreateRoleInput!): Role!
+  createRole(createRoleInput: CreateRoleInput!): Role
   updateGameroom(updateGameroomInput: UpdateGameroomInput!): Gameroom!
   removeRoleById(id: Float!): Boolean!
   removeRoles: Boolean!
@@ -108,7 +109,16 @@ type Mutation {
   createType(createTypeInput: CreateTypeInput!): Type!
   updateType(updateTypeInput: UpdateTypeInput!): Type!
   deleteType(idTypeInput: Float!): Boolean!
-  activeType(idTypeInput: Float!): Type!
+  activeType(idTypeInput: Float!): Boolean!
+}
+
+input UpdateUserInput {
+  id: Float!
+  roleId: String
+  password: String
+  active: Boolean
+  picture: String
+  name: String
 }
 
 input CreateRoleInput {
@@ -151,9 +161,9 @@ input CreateTypeInput {
 
 input UpdateTypeInput {
   id: Float!
-  name: String!
-  acronym: String!
+  name: String
+  acronym: String
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-08-03T03:53:02.140Z"
+  updateAt: DateTime = "2021-08-05T11:23:17.005Z"
 }

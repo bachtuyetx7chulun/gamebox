@@ -8,7 +8,7 @@ import { RolesService } from './roles.service'
 export class RolesResolver {
   constructor(private readonly rolesService: RolesService) {}
 
-  @Mutation(() => Role)
+  @Mutation(() => Role, { nullable: true })
   createRole(@Args('createRoleInput') createRoleInput: CreateRoleInput) {
     return this.rolesService.create(createRoleInput)
   }

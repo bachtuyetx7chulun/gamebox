@@ -8,13 +8,18 @@ export class RolesService {
   constructor(private prisma: PrismaClient) {}
 
   async create(createRoleInput: any) {
-    const { name, description } = createRoleInput
-    const role = new Role(name, description)
-    const data = await this.prisma.role.create({
-      data: role,
-    })
+    try {
+      const { name, description } = createRoleInput
+      if (name === '') return null
+      const role = new Role(name, description)
+      const data = await this.prisma.role.create({
+        data: role,
+      })
 
-    return data
+      return data
+    } catch (error) {
+      return null
+    }
   }
 
   async findAll() {

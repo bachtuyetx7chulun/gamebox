@@ -1,22 +1,35 @@
+import * as Jwt from 'jsonwebtoken'
+import { jwt } from '@config/constansts'
+
+export const jwtSign = (payload: any) => {
+  return Jwt.sign(payload, jwt.secret)
+}
+
+export const jwtDecode = (token: string) => {
+  return Jwt.verify(token, jwt.secret)
+}
+
 // TODO: Simple to use, get type user and return them
 export const getPayload = (payload: any, type: string) => {
   if (type === 'local') {
-    const { email } = payload
+    const { email, roleId } = payload
     return {
       email,
       googleId: null,
       facebookId: null,
       type,
+      role: roleId,
     }
   }
 
   if (type === 'google') {
-    const { googleId } = payload
+    const { googleId, roleId } = payload
     return {
       email: null,
       googleId,
       facebookId: null,
       type,
+      role: roleId,
     }
   }
 

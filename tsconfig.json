@@ -23,7 +23,8 @@
       "@roles/*":["src/roles/*"],
       "@games/*": ["src/games/*"],
       "@gameusers/*":["src/gameusers/*"],
-      "@gamerooms/*":["src/gamerooms/*"]
+      "@gamerooms/*":["src/gamerooms/*"],
+      "@socketio/*": ["src/socketio/*"]
     }
   }
 }
