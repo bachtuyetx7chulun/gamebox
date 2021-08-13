@@ -9,19 +9,25 @@ export class GamesService {
   constructor(private prisma: PrismaClient) {}
 
   async create(createGameInput: CreateGameInput) {
-    const { name, description, engine } = createGameInput
-    const game = new Game(name, engine, description)
-    const data = await this.prisma.game.create({
-      data: game,
-    })
+    try {
+      const { name, description, platform, picture } = createGameInput
+      const game = new Game(name, platform, description, picture)
 
-    return data
+      const data = await this.prisma.game.create({
+        data: { ...game },
+      })
+
+      return data
+    } catch (error) {
+      return error
+    }
   }
 
   async findAll() {
     return await this.prisma.game.findMany({
       include: {
-        GameUser: true,
+        gameUsers: true,
+        gameRooms: true,
       },
     })
   }
@@ -29,7 +35,8 @@ export class GamesService {
   async findOne(id) {
     const game = await this.prisma.game.findUnique({
       include: {
-        GameUser: true,
+        gameRooms: true,
+        gameUsers: true,
       },
       where: {
         id,
@@ -41,14 +48,15 @@ export class GamesService {
 
   async update(id, updateGameInput: UpdateGameInput) {
     try {
-      const { engine, description } = updateGameInput
+      const { platform, description, picture } = updateGameInput
       const updateField = await this.prisma.game.update({
         where: {
           id,
         },
         data: {
-          engine,
+          platform,
           description,
+          picture,
         },
       })
 

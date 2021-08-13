@@ -1,5 +1,6 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { UpdateGameroomInput } from './dto/update-gameroom.input'
+import { CreateGameRoomInput } from './dto/create-gameroom.input'
+import { UpdateGameRoomInput } from './dto/update-gameroom.input'
 import { Gameroom } from './entities/gameroom.entity'
 import { GameroomsService } from './gamerooms.service'
 
@@ -8,8 +9,8 @@ export class GameroomsResolver {
   constructor(private readonly gameroomsService: GameroomsService) {}
 
   @Mutation(() => Gameroom)
-  createGameroom(@Args('roomName') roomName: string) {
-    return this.gameroomsService.create(roomName)
+  createGameroom(@Args('createGameRoomInput') createGameRoomInput: CreateGameRoomInput) {
+    return this.gameroomsService.create(createGameRoomInput)
   }
 
   @Query(() => [Gameroom], { name: 'gamerooms' })
@@ -23,7 +24,7 @@ export class GameroomsResolver {
   }
 
   @Mutation(() => Gameroom)
-  updateGameroom(@Args('updateGameroomInput') updateGameroomInput: UpdateGameroomInput) {
+  updateGameroom(@Args('updateGameroomInput') updateGameroomInput: UpdateGameRoomInput) {
     return this.gameroomsService.update(updateGameroomInput.id, updateGameroomInput)
   }
 

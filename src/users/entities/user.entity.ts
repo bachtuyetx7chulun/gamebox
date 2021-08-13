@@ -42,7 +42,7 @@ export class User {
   @Field({ nullable: true, middleware: [isPrivated] })
   password: string
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, middleware: [isPrivated] })
   refreshToken: string
 
   @Field({ name: 'createAt', defaultValue: new Date() })

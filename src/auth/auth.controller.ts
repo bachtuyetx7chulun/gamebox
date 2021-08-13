@@ -20,6 +20,12 @@ export class AuthController {
     return this.authService.googleSignIn(req)
   }
 
+  @Post('google')
+  // @UseGuards(AuthGuard('google'))
+  googleHandleFromClient(@Req() req) {
+    return this.authService.googleSignInClient(req)
+  }
+
   @Post('signin')
   @ApiResponse({ status: 200, description: 'Return access_token and refresh_token' })
   @ApiResponse({ status: 400, description: 'Bad request' })

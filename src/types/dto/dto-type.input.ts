@@ -17,17 +17,17 @@ export class UpdateTypeInput {
   @Field()
   id: number
 
-  @Field()
-  name: string
+  @Field({ nullable: true })
+  name?: string
 
-  @Field()
-  acronym: string
+  @Field({ nullable: true })
+  acronym?: string
 
   @Field({ nullable: true })
   description?: string
 
   @Field({ nullable: true })
-  active: boolean
+  active?: boolean
 
   @Field({ defaultValue: new Date(), nullable: true })
   updateAt: Date

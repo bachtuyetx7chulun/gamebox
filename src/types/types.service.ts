@@ -42,32 +42,40 @@ export class TypesService {
   }
 
   async delete(idTypeInput): Promise<any> {
-    const { active } = await this.prisma.type.findFirst({ where: { id: idTypeInput } })
-    if (active) {
+    try {
+      const { active } = await this.prisma.type.findFirst({ where: { id: idTypeInput } })
+      if (active) {
+        await this.prisma.type.update({
+          where: {
+            id: idTypeInput,
+          },
+          data: {
+            active: false,
+          },
+        })
+        return false
+      } else {
+        await this.prisma.type.delete({ where: { id: idTypeInput } })
+        return true
+      }
+    } catch (error) {
+      return false
+    }
+  }
+
+  async active(idTypeInput): Promise<any> {
+    try {
       await this.prisma.type.update({
         where: {
           id: idTypeInput,
         },
         data: {
-          active: false,
+          active: true,
         },
       })
-      return false
-    } else {
-      await this.prisma.type.delete({ where: { id: idTypeInput } })
       return true
+    } catch (error) {
+      return false
     }
-  }
-
-  async active(idTypeInput): Promise<any> {
-    const activeField = await this.prisma.type.update({
-      where: {
-        id: idTypeInput,
-      },
-      data: {
-        active: false,
-      },
-    })
-    return activeField
   }
 }

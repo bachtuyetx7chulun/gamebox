@@ -1,3 +1,4 @@
+import { Gameroom } from '@gamerooms/entities/gameroom.entity'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { Gameuser } from 'src/gameusers/entities/gameuser.entity'
 
@@ -6,17 +7,23 @@ export class Game {
   id: number
   name: string
   description: string
-  engine: string
+  picture: string
+  platform: string
   createAt: Date
   updateAt: Date
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @Field((type) => [Gameuser], { nullable: true, defaultValue: [] })
-  gameusers: Gameuser[]
+  @Field((type) => [Gameroom], { nullable: true, defaultValue: [] })
+  gameRooms: Gameroom[]
 
-  constructor(name: string, engine: string, description: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @Field((type) => [Gameuser], { nullable: true, defaultValue: [] })
+  gameUsers: Gameuser[]
+
+  constructor(name: string, platform: string, description: string, picture?: string) {
     this.name = name
-    this.engine = engine
+    this.platform = platform
     this.description = description
+    this.picture = picture || ''
   }
 }

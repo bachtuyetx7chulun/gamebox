@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import { Game } from '@games/entities/game.entity'
 import { Gameuser } from '@gameusers/entities/gameuser.entity'
 import { Field, ObjectType } from '@nestjs/graphql'
 
@@ -9,6 +9,10 @@ export class Gameroom {
   playerCount: number
   createAt: Date
   updateAt: Date
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @Field((type) => Game)
+  game: Game
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @Field((type) => [Gameuser], { defaultValue: [], nullable: true })

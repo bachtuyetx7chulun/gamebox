@@ -9,5 +9,8 @@ export class CreateGameInput {
   description: string
 
   @Field()
-  engine: string
+  platform: string
+
+  @Field({ nullable: true })
+  picture: string
 }

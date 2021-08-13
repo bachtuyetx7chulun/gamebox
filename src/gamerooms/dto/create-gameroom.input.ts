@@ -1,10 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
-export class CreateGameroomInput {
+export class CreateGameRoomInput {
   @Field()
   name: string
 
   @Field()
+  gameId: number
+
+  @Field({ defaultValue: 0 })
   playerCount: number
 }

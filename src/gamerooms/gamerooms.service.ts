@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
-import { UpdateGameroomInput } from './dto/update-gameroom.input'
-import { Gameroom } from './entities/gameroom.entity'
+import { CreateGameRoomInput } from './dto/create-gameroom.input'
+import { UpdateGameRoomInput } from './dto/update-gameroom.input'
 
 @Injectable()
 export class GameroomsService {
   constructor(private prisma: PrismaClient) {}
 
-  async create(roomName) {
-    const roomData = new Gameroom(roomName)
+  async create(createGameRoomInput: CreateGameRoomInput) {
+    const { gameId, name } = createGameRoomInput
     const room = await this.prisma.gameRoom.create({
-      data: roomData,
+      data: {
+        name,
+        gameId,
+      },
     })
     return room
   }
@@ -31,7 +34,7 @@ export class GameroomsService {
     return gameRoom
   }
 
-  async update(id: number, updateGameroomInput: UpdateGameroomInput) {
+  async update(id: number, updateGameroomInput: UpdateGameRoomInput) {
     try {
       const { name, playerCount } = updateGameroomInput
       const updateField = await this.prisma.gameRoom.update({

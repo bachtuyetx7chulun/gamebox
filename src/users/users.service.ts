@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaClient } from '@prisma/client'
 import { getTokenFromBearer } from '@utils/jwt.util'
+import { UpdateUserInput } from './dto/update-user.input'
 
 @Injectable()
 export class UsersService {
@@ -57,6 +59,29 @@ export class UsersService {
     }
   }
 
+  async update(id, updateUserInput: UpdateUserInput) {
+    try {
+      const { id, ...payload } = updateUserInput
+      const updateField = await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          ...payload,
+          updateAt: new Date(),
+        },
+        include: {
+          gameUsers: true,
+          role: true,
+          type: true,
+        },
+      })
+      return updateField
+    } catch (error) {
+      return null
+    }
+  }
+
   async removeUserById(id) {
     try {
       await this.prisma.user.delete({
@@ -74,8 +99,6 @@ export class UsersService {
     try {
       const token = getTokenFromBearer(access_token)
       const payload = this.jwtService.verify(token)
-      console.log(payload)
-
       const { email, googleId, facebookId, type } = payload
 
       if (type === 'local') {

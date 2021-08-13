@@ -22,7 +22,7 @@ export class TypesResolver {
     return this.typesService.delete(idTypeInput)
   }
 
-  @Mutation(() => Type)
+  @Mutation(() => Boolean)
   activeType(@Args('idTypeInput') idTypeInput: number) {
     return this.typesService.active(idTypeInput)
   }
