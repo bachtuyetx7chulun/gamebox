@@ -33,7 +33,6 @@ import { EventsModule } from '@socketio/events/events.module'
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
-      playground: true,
       validationRules: [depthLimit(3)],
       transformSchema: (schema: GraphQLSchema) => {
         schema = applyMiddleware(schema, permissions)

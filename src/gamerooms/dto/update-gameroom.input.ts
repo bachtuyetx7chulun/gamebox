@@ -1,7 +1,7 @@
-import { InputType, PartialType } from '@nestjs/graphql'
-import { CreateGameroomInput } from './create-gameroom.input'
+import { InputType, OmitType, PartialType } from '@nestjs/graphql'
+import { CreateGameRoomInput } from './create-gameroom.input'
 
 @InputType()
-export class UpdateGameroomInput extends PartialType(CreateGameroomInput) {
+export class UpdateGameRoomInput extends PartialType(OmitType(CreateGameRoomInput, ['gameId'])) {
   id: number
 }

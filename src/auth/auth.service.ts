@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 import { PrismaClient } from '@prisma/client'
 import { comparePassword, hashPassword } from '@utils/bcrypt.util'
 import { compareRefreshToken, getPayload, jwtParser } from '@utils/jwt.util'
+import { OAuth2Client } from 'google-auth-library'
 
 @Injectable()
 export class AuthService {
@@ -73,6 +74,65 @@ export class AuthService {
       }
     } catch (error) {
       throw new Error(error)
+    }
+  }
+
+  async googleSignInClient(req: any) {
+    try {
+      const { access_token } = req.headers
+      const client = new OAuth2Client('1038070199091-2ru1vnihm48p1qkj2d4bhc0j7e8rbqo3.apps.googleusercontent.com')
+      const result = await client.verifyIdToken({
+        idToken: access_token,
+        audience: '1038070199091-2ru1vnihm48p1qkj2d4bhc0j7e8rbqo3.apps.googleusercontent.com',
+      })
+
+      const { email, name, picture } = result['payload']
+      if (!email) {
+        return new HttpException('Google user is not exist', HttpStatus.UNAUTHORIZED)
+      }
+
+      const userField = await this.prisma.user.findFirst({
+        where: {
+          type: {
+            name: 'google',
+          },
+          googleId: email,
+        },
+        include: {
+          role: true,
+          type: true,
+        },
+      })
+
+      if (userField === null) {
+        const data = { googleId: email, picture, name, typeId: 'google', roleId: 'user' }
+        const newGoogleUser = await this.prisma.user.create({
+          data,
+        })
+
+        const payload = getPayload(newGoogleUser, 'google')
+        const refreshToken = await jwtParser(this.jwtService, payload, jwt.refresh_secret, { expiresIn: '30d' })
+        await this.prisma.user.update({
+          where: {
+            id: newGoogleUser.id,
+          },
+          data: { refreshToken },
+        })
+
+        return {
+          access_token: this.jwtService.sign(payload),
+          refresh_token: refreshToken,
+        }
+      }
+
+      const payload = getPayload(userField, 'google')
+      const refreshToken = await jwtParser(this.jwtService, payload, jwt.refresh_secret, { expiresIn: '30d' })
+      return {
+        access_token: this.jwtService.sign(payload),
+        refresh_token: refreshToken,
+      }
+    } catch (error) {
+      return new Error(error)
     }
   }
 

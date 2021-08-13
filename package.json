@@ -42,6 +42,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
+    "google-auth-library": "^7.5.0",
     "graphql": "^15.5.1",
     "graphql-depth-limit": "^1.1.0",
     "graphql-middleware": "^6.0.10",

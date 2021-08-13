@@ -25,7 +25,7 @@ model User {
   updateAt     DateTime   @default(now())
   typeId       String // Xây dựng quan hệ với Type
   roleId       String
-  gameUsers     GameUser[]
+  gameUsers    GameUser[]
 }
 
 model Type {
@@ -53,10 +53,12 @@ model Game {
   id          Int        @id @default(autoincrement())
   name        String     @unique
   description String?
-  engine      String?
+  platform    String?
+  picture     String?
   createAt    DateTime   @default(now())
   updateAt    DateTime   @default(now())
-  GameUser    GameUser[]
+  gameUsers   GameUser[]
+  gameRooms  GameRoom[]
 }
 
 model GameUser {
@@ -71,10 +73,13 @@ model GameUser {
 }
 
 model GameRoom {
-  id          Int        @id @default(autoincrement())
-  name        String? // Random name room or regist a name  room
+  id   Int     @id @default(autoincrement())
+  name String? // Random name room or regist a name  room
+
   playerCount Int?
   gameUsers   GameUser[]
   createAt    DateTime   @default(now())
   updateAt    DateTime   @default(now())
+  Game        Game?      @relation(fields: [gameId], references: [id])
+  gameId      Int?
 }

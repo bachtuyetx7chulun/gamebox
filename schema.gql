@@ -18,21 +18,24 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Gameroom {
+type Game {
+  gameRooms: [Gameroom!]
   gameUsers: [Gameuser!]
   id: Float!
   name: String!
-  playerCount: Float!
+  description: String!
+  picture: String!
+  platform: String!
   createAt: DateTime!
   updateAt: DateTime!
 }
 
-type Game {
-  gameusers: [Gameuser!]
+type Gameroom {
+  game: Game!
+  gameUsers: [Gameuser!]
   id: Float!
   name: String!
-  description: String!
-  engine: String!
+  playerCount: Float!
   createAt: DateTime!
   updateAt: DateTime!
 }
@@ -93,7 +96,7 @@ type Mutation {
   removeUsers: Boolean!
   removeUserById(id: Float!): Boolean!
   createRole(createRoleInput: CreateRoleInput!): Role
-  updateGameroom(updateGameroomInput: UpdateGameroomInput!): Gameroom!
+  updateGameroom(updateGameroomInput: UpdateGameRoomInput!): Gameroom!
   removeRoleById(id: Float!): Boolean!
   removeRoles: Boolean!
   createGame(createGameInput: CreateGameInput!): Game!
@@ -103,7 +106,7 @@ type Mutation {
   updateGameuser(updateGameuserInput: UpdateGameuserInput!): Gameuser
   removeGameuserById(id: Int!): Boolean
   removeGameusers: Boolean
-  createGameroom(roomName: String!): Gameroom!
+  createGameroom(createGameRoomInput: CreateGameRoomInput!): Gameroom!
   removeGameroomById(id: Int!): Boolean!
   removeGamerooms: Boolean!
   createType(createTypeInput: CreateTypeInput!): Type!
@@ -126,16 +129,17 @@ input CreateRoleInput {
   description: String
 }
 
-input UpdateGameroomInput {
+input UpdateGameRoomInput {
   name: String
-  playerCount: Float
+  playerCount: Float = 0
   id: Float!
 }
 
 input CreateGameInput {
   name: String!
   description: String
-  engine: String!
+  platform: String!
+  picture: String
 }
 
 input CreateGameuserInput {
@@ -153,6 +157,12 @@ input UpdateGameuserInput {
   id: Int!
 }
 
+input CreateGameRoomInput {
+  name: String!
+  gameId: Float!
+  playerCount: Float = 0
+}
+
 input CreateTypeInput {
   name: String!
   acronym: String!
@@ -165,5 +175,5 @@ input UpdateTypeInput {
   acronym: String
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-08-05T11:23:17.005Z"
+  updateAt: DateTime = "2021-08-13T17:18:39.839Z"
 }

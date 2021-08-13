@@ -1,5 +1,7 @@
 import { getTokenFromBearer, jwtDecode } from '@utils/jwt.util'
 import { or, rule, shield } from 'graphql-shield'
+import { config } from 'dotenv'
+config()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isAuthenticated = rule()(async (parent, args, ctx, info) => {
@@ -16,6 +18,8 @@ const isAuthenticated = rule()(async (parent, args, ctx, info) => {
 const isRole = (role: string) =>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   rule()(async (parent, args, ctx, info) => {
+    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) return true
+
     const headers = ctx['req']['headers']
     const { access_token } = headers
     const token = getTokenFromBearer(access_token)
