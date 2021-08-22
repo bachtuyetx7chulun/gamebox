@@ -11,6 +11,7 @@ import {
   OnGatewayConnection,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
+import axios from 'axios'
 
 @WebSocketGateway({
   namespace: '/tictactoe',
@@ -50,5 +51,66 @@ export class TicTacToeGateway implements OnGatewayInit, OnGatewayConnection, OnG
     console.log(client.id)
 
     this.server.emit('message', data)
+  }
+
+  @SubscribeMessage('room_action')
+  async handleRoomUpdate(@MessageBody() data: any) {
+    const { action, payload } = data
+    if (action === 'create_room') {
+      if (payload.userId) {
+        await axios.post('http://localhost:3000/graphql', {
+          query: `mutation createGameUser {
+        createGameuser(
+          createGameuserInput: { name: "${payload.name}", gameId: ${payload.gameId}, gameRoomId: ${payload.roomId}, userId: ${payload.userId} }
+        ) {
+          id
+          name
+          gameRoom {
+            id
+            name
+            playerCount
+          }
+          game {
+            id
+            name
+            description
+          }
+          user {
+            name
+          }
+        }
+      }
+      `,
+        })
+      } else {
+        await axios.post('http://localhost:3000/graphql', {
+          query: `mutation createGameUser {
+        createGameuser(
+          createGameuserInput: { name: "${payload.name}", gameId: ${payload.gameId}, gameRoomId: ${payload.roomId} }
+        ) {
+          id
+          name
+          gameRoom {
+            id
+            name
+            playerCount
+          }
+          game {
+            id
+            name
+            description
+          }
+          user {
+            name
+          }
+        }
+      }
+      `,
+        })
+      }
+
+      console.log(payload)
+      this.server.emit('room_action', { action: 'create_room', payload: { message: 'success' } })
+    }
   }
 }

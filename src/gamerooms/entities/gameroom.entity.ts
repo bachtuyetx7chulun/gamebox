@@ -6,12 +6,14 @@ import { Field, ObjectType } from '@nestjs/graphql'
 export class Gameroom {
   id: number
   name: string
-  playerCount: number
   createAt: Date
   updateAt: Date
 
+  @Field({ nullable: true })
+  playerCount: number
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @Field((type) => Game)
+  @Field((type) => Game, { nullable: true })
   game: Game
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

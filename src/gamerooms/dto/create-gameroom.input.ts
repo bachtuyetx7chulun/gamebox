@@ -8,6 +8,6 @@ export class CreateGameRoomInput {
   @Field()
   gameId: number
 
-  @Field({ defaultValue: 0 })
+  @Field({ defaultValue: 0, nullable: true })
   playerCount: number
 }

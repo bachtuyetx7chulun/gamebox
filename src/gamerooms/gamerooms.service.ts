@@ -8,24 +8,32 @@ export class GameroomsService {
   constructor(private prisma: PrismaClient) {}
 
   async create(createGameRoomInput: CreateGameRoomInput) {
-    const { gameId, name } = createGameRoomInput
+    const { gameId, name, playerCount } = createGameRoomInput
     const room = await this.prisma.gameRoom.create({
       data: {
         name,
         gameId,
+        playerCount,
       },
+      include: { game: true, gameUsers: true },
     })
     return room
   }
 
   async findAll() {
-    return await this.prisma.gameRoom.findMany({})
+    return await this.prisma.gameRoom.findMany({
+      include: {
+        game: true,
+        gameUsers: true,
+      },
+    })
   }
 
   async findOne(id: number) {
     const gameRoom = await this.prisma.gameRoom.findUnique({
       include: {
         gameUsers: true,
+        game: true,
       },
       where: {
         id,

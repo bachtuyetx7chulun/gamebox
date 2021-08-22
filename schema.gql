@@ -31,11 +31,11 @@ type Game {
 }
 
 type Gameroom {
-  game: Game!
+  playerCount: Float
+  game: Game
   gameUsers: [Gameuser!]
   id: Float!
   name: String!
-  playerCount: Float!
   createAt: DateTime!
   updateAt: DateTime!
 }
@@ -175,5 +175,5 @@ input UpdateTypeInput {
   acronym: String
   description: String
   active: Boolean
-  updateAt: DateTime = "2021-08-13T17:18:39.839Z"
+  updateAt: DateTime = "2021-08-20T02:43:12.150Z"
 }

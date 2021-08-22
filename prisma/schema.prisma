@@ -80,6 +80,6 @@ model GameRoom {
   gameUsers   GameUser[]
   createAt    DateTime   @default(now())
   updateAt    DateTime   @default(now())
-  Game        Game?      @relation(fields: [gameId], references: [id])
+  game        Game?      @relation(fields: [gameId], references: [id])
   gameId      Int?
 }
